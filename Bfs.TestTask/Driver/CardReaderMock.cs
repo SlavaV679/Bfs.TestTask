@@ -1,31 +1,47 @@
-using System.Runtime.CompilerServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bfs.TestTask.Driver;
 
 public class CardDriverMock : ICardDriverMock
 {
+    private CardData? _cardData;
+
+    private EjectResult _ejectResult = EjectResult.Ejected;
+
     public async Task<CardData?> ReadCard(CancellationToken cancellationToken)
     {
-      throw new NotImplementedException();
+        await Task.Delay(200, cancellationToken);
+
+        return cancellationToken.IsCancellationRequested
+            ? null
+            : _cardData;
     }
 
     public IAsyncEnumerable<EjectResult> EjectCard(CancellationToken cancellationToken)
     {
+
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    yield return cancellationToken.IsCancellationRequested
+        //                ? EjectResult.Retracted
+        //                : _ejectResult;
+        //}
+
         throw new NotImplementedException();
     }
 
     public void SetCardData(CardData cardData)
     {
-        throw new NotImplementedException();
+        _cardData = cardData;
     }
 
     public void CantReadCard()
     {
-        throw new NotImplementedException();
+        _cardData = null;
     }
 
     public void TakeCard()
     {
-        throw new NotImplementedException();
+        _ejectResult = EjectResult.CardTaken;
     }
 }
